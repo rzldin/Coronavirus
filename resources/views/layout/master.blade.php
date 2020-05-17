@@ -33,6 +33,8 @@
           z-index: 99;
       }      
     </style>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
     <title>Pantau Covid-19</title>
   </head>
 
