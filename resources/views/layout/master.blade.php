@@ -16,15 +16,29 @@
       .footer {
         height: 85px;
       }
-
       
+      a.scrolltotop {
+          background: #D50000 none repeat scroll 0 0;
+          border-radius: 5px;
+          bottom: 20px;
+          color: #ffffff;
+          display: none;
+          font-size: 20px;
+          height: 40px;
+          padding-top: 5px;
+          position: fixed;
+          right: 20px;
+          text-align: center;
+          width: 40px;
+          z-index: 99;
+      }      
     </style>
     <title>Pantau Covid-19</title>
   </head>
 
   <body>
   
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light" id="home">
     
     <div class="container">
       <img src="{{ asset('image/covid.png') }}" width="70" height="70" alt="InfoCorona">
@@ -36,7 +50,7 @@
           <!-- <li class="nav-item active">
             <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
           </li> -->
-          <li class="nav-item" style="margin-left: 25px;font-size:20px;">
+          {{-- <li class="nav-item" style="margin-left: 25px;font-size:20px;">
             <a class="nav-link" href="{{ route('index') }}"><i class="fa fa-home"></i> BERANDA</a>
           </li>
           <li class="nav-item" style="margin-left: 15px;font-size:20px;">
@@ -44,7 +58,7 @@
           </li>
           <li class="nav-item" style="margin-left: 15px;font-size:20px;">
             <a class="nav-link" href="javascript:;"><i class="fa fa-phone"></i> HOTLINE</a>
-          </li>
+          </li> --}}
         </ul>
         <span class="navbar-text">
         <a href="https://github.com/rzldin" style="text-decoration:none;padding-left:7px;">

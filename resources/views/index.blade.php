@@ -1,7 +1,6 @@
 @extends('layout.master')
 
-@section('content') 
-  
+@section('content')
   <div class="jumbotron jumbotron-fluid">
     <div class="container">
       <h1 class="display-4 text-center">Corona Virus</h1>
@@ -71,6 +70,7 @@
           </div>
         </div>
 
+        <!-- Data Berdasarkan Provinsi -->
         <div class="col-md-12 mt-5">
           <div class="card">
             <div class="card-header">
@@ -99,8 +99,8 @@
                     <th scope="row" class="text-center">{{ $no }}</th>
                     <td colspan="3">{{ $d['attributes']['Provinsi'] }}</td>
                     <td class="text-center">{{ number_format($d['attributes']['Kasus_Posi'], 0, ",", ",") }}</td>
-                    <td class="text-center">{{ $d['attributes']['Kasus_Semb'] }}</td>
-                    <td class="text-center">{{ $d['attributes']['Kasus_Meni'] }}</td>
+                    <td class="text-center">{{ number_format($d['attributes']['Kasus_Semb'], 0, ",", ",") }}</td>
+                    <td class="text-center">{{ number_format($d['attributes']['Kasus_Meni'], 0, ",", ",") }}</td>
                   </tr>
                   @endforeach
                 </tbody>
@@ -108,10 +108,15 @@
             </div>
           </div>
         </div>
-      
       </div>
     </div>
   </div>
+
+  <!-- ScrollTop -->
+  <div>
+    <a href="javascript:;" class="scrolltotop"><span class="fa fa-chevron-up"></span></a>
+  </div>
+  <!-- /ScrollTop -->
 
   <div class="container">
     <div class="row mt-5">
@@ -126,6 +131,9 @@
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.4.0/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
 
 
     <script>
@@ -146,9 +154,9 @@
               success : function(data){
                 try{
                   let json = data;
-                  let positif = data.cases;
-                  let sembuh = data.recovered;
-                  let meninggal = data.deaths;
+                  let positif = numeral(data.cases).format('0,0');
+                  let sembuh = numeral(data.recovered).format('0,0');
+                  let meninggal = numeral(data.deaths).format('0,0');
 
                   $('#data-kasus').html(positif);
                   $('#data-mati').html(meninggal);
@@ -176,9 +184,9 @@
                         let namaNegara = dataNegara.country;
 
                         if( namaNegara === 'Indonesia' ){
-                          let kasus = dataNegara.cases;
-                          let sembuh = dataNegara.recovered;
-                          let mati = dataNegara.deaths;
+                          let kasus = numeral(dataNegara.cases).format('0,0');
+                          let sembuh = numeral(dataNegara.recovered).format('0,0');
+                          let mati = numeral(dataNegara.deaths).format('0,0');
 
                           $('#data-id').html(`
                             Positif : ${kasus} orang <br>
@@ -195,28 +203,21 @@
               }
           });
         }
-
-        function dataProvinsi(){
-          $.ajax({
-              url : '{{ route('index') }}',
-              type : 'GET',
-              success : function(data){
-                try{
-                  let json = data;
-                  let positif = data.cases;
-                  let sembuh = data.recovered;
-                  let meninggal = data.deaths;
-
-                  $('#data-kasus').html(positif);
-                  $('#data-mati').html(meninggal);
-                  $('#data-sembuh').html(sembuh);
-                  //alert(sembuh);
-                }catch{
-                  alert('Error');
-                }
-              }
-          });
-        }
+        $(window).scroll(function () {
+            var totalHeight = $(window).scrollTop();
+            if (totalHeight > 300) {
+                $(".scrolltotop").fadeIn();
+            } else {
+                $(".scrolltotop").fadeOut();
+            }
+        });
+    
+    //proses scroll
+        $('a.scrolltotop').on('click', function (event) {
+            $([document.documentElement, document.body]).animate({
+                scrollTop: $("#home").offset().top
+              }, 300);
+        });
 
       });
     </script>
