@@ -148,14 +148,17 @@
       $(document).ready(() => {
 
         dataSemuaNegara();
+        dataNasional();
         dataNegara();
 
         //refresh otomatis
         setInterval(() => {
           dataSemuaNegara();
+          //dataNasional();
           dataNegara();
         }, 3000);
 
+        //Get Data Global
         function dataSemuaNegara(){
           $.ajax({
               url : 'https://coronavirus-19-api.herokuapp.com/all',
@@ -177,6 +180,7 @@
           });
         }
 
+        // Get Data Nasional
         function dataNegara(){
           $.ajax({
               url : 'https://coronavirus-19-api.herokuapp.com/countries',
@@ -210,7 +214,22 @@
                 }
               }
           });
-        }
+        };
+
+        //Get Pemetaan Nasional
+        function dataNasional(){
+          $.getJSON('https://services5.arcgis.com/VS6HdKS0VfIhv8Ct/arcgis/rest/services/COVID19_Indonesia_per_Provinsi/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=json', function(data){
+            let json = data.features;
+            $.each(json, function (i, data){
+              L.marker([`${data.geometry.y}`, `${data.geometry.x}`]).addTo(mymap)
+              .bindPopup(`<b>Provinsi :</b> ${data.attributes.Provinsi}<br>
+                          <b>Positif :</b> ${data.attributes.Kasus_Posi}<br>
+                          <b>Sembuh :</b> ${data.attributes.Kasus_Semb}<br>
+                          <b>Meninggal : </b> ${data.attributes.Kasus_Meni}`).openPopup();
+            });
+          });
+        };
+        
 
         // ScrollTop
         $(window).scroll(function () {
@@ -230,7 +249,7 @@
         });
         //End ScrollTop
 
-        //Map Pemetaan 
+        //Map Pemetaan Nasional
         var mymap = L.map('mapid').setView([-1.628531, 117.996313], 5);
 
       L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
