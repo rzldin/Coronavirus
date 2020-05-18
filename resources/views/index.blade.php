@@ -257,7 +257,7 @@
                       <tr>
                         <td class="text-center" colspan="3">${data.attributes.nama}</td>
                         <td class="text-center">${data.attributes.alamat}</td>
-                        <td class="text-center">${data.attributes.wilayah}</td>
+                        <td class="text-center"><a href="https://maps.google.com/?ll=${data.attributes.lat},${data.attributes.lon}" style="text-decoration:none;">${data.attributes.wilayah}</a></td>
                         <td class="text-center"><a href="tel:${data.attributes.telepon}"><h4 class="badge badge-info">${data.attributes.telepon}</h4></a></td>
                       </tr>`);
             });
@@ -282,9 +282,9 @@
             $.each(json, function (i, data){
               L.marker([`${data.geometry.y}`, `${data.geometry.x}`]).addTo(mymap)
               .bindPopup(`<b>Provinsi :</b> ${data.attributes.Provinsi}<br>
-                          <b>Positif :</b> ${data.attributes.Kasus_Posi}<br>
-                          <b>Sembuh :</b> ${data.attributes.Kasus_Semb}<br>
-                          <b>Meninggal : </b> ${data.attributes.Kasus_Meni}`).openPopup();
+                          <b>Positif :</b> ${numeral(data.attributes.Kasus_Posi).format('0,0')}<br>
+                          <b>Sembuh :</b> ${numeral(data.attributes.Kasus_Semb).format('0,0')}<br>
+                          <b>Meninggal : </b> ${numeral(data.attributes.Kasus_Meni).format('0,0')}`).openPopup();
             });
           });
         };
