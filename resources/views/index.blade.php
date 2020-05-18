@@ -7,7 +7,8 @@
       <p class="lead text-center">Pantau Coronavirus Global & Indonesia</p>
     </div>
     <div class="container mt-4">
-      <div class="row">  
+      <div class="row">
+
         <!-- Total Positif -->
         <div class="col-md-4 col-12 mb-3">
           <div class="bg-danger box text-white">
@@ -109,6 +110,35 @@
           </div>
         </div>
 
+        <div class="container mt-4">
+          <div class="row">
+
+            <div class="col-sm-12">
+              <div class="card">
+                <div class="card-header bg-primary text-white">
+                  <h5>Daftar Rumah Sakit Rujukan</h5>
+                </div>
+                <div class="card-body table-responsive" style="height: 600px;">
+                  <table class="table table-bordered">
+                    <thead class="text-center">
+                      <tr>
+                        <th scope="col" colspan="3">Nama</th>
+                        <th scope="col">Alamat</th>
+                        <th scope="col">Wilayah</th>
+                        <th scope="col">Telepon</th>
+                      </tr>
+                    </thead>
+                    <tbody id="daftar-rumahsakit">
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+
         <!-- Map Persebaran -->
         <div class="col-sm-12 mt-5">
           <div id="mapid" style="height: 550px;"></div>
@@ -148,6 +178,7 @@
       $(document).ready(() => {
 
         dataSemuaNegara();
+        dataRumahSakit();
         dataNasional();
         dataNegara();
 
@@ -216,6 +247,34 @@
           });
         };
 
+
+        //Get Data Rumah Sakit
+        function dataRumahSakit(){
+          $.getJSON('https://services5.arcgis.com/VS6HdKS0VfIhv8Ct/arcgis/rest/services/RS_Rujukan_Update_May_2020/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=json', function(data){
+            let json = data.features;
+            $.each(json, function (i, data){
+              $('#daftar-rumahsakit').append(`
+                      <tr>
+                        <td class="text-center" colspan="3">${data.attributes.nama}</td>
+                        <td class="text-center">${data.attributes.alamat}</td>
+                        <td class="text-center">${data.attributes.wilayah}</td>
+                        <td class="text-center"><a href="tel:${data.attributes.telepon}"><h4 class="badge badge-info">${data.attributes.telepon}</h4></a></td>
+                      </tr>`);
+            });
+          });
+        };
+
+          //Map Pemetaan Nasional
+          var mymap = L.map('mapid').setView([-1.628531, 117.996313], 5);
+
+          L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+            maxZoom: 18,
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+              '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+              'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            id: 'mapbox/streets-v11',
+          }).addTo(mymap);
+
         //Get Pemetaan Nasional
         function dataNasional(){
           $.getJSON('https://services5.arcgis.com/VS6HdKS0VfIhv8Ct/arcgis/rest/services/COVID19_Indonesia_per_Provinsi/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=json', function(data){
@@ -248,19 +307,6 @@
               }, 300);
         });
         //End ScrollTop
-
-        //Map Pemetaan Nasional
-        var mymap = L.map('mapid').setView([-1.628531, 117.996313], 5);
-
-      L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-        maxZoom: 18,
-        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-          '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-          'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-        id: 'mapbox/streets-v11',
-      }).addTo(mymap);
-
-      L.marker([51.5, -0.09]).addTo(mymap);
 
       });
     </script>
